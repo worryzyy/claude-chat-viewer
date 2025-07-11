@@ -3,11 +3,19 @@
   "displayName": "Claude Chat Viewer",
   "description": "可视化展示 Claude 聊天记录的 VS Code 扩展",
   "version": "0.0.1",
+  "publisher": "claude-chat-viewer",
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "claude",
+    "chat",
+    "ai",
+    "viewer",
+    "record"
   ],
   "activationEvents": [
     "onStartupFinished"
