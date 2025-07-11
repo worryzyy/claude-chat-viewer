@@ -253,11 +253,11 @@ export function getCurrentLanguage(): string {
             return language;
         }
         
-        // 默认返回中文
-        return 'zh-cn';
+        // 默认返回英文
+        return 'en';
     } catch (error) {
-        // 如果无法获取配置，默认返回中文
-        return 'zh-cn';
+        // 如果无法获取配置，默认返回英文
+        return 'en';
     }
 }
 

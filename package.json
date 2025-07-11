@@ -25,22 +25,22 @@
     "commands": [
       {
         "command": "claudeChat.openViewer",
-        "title": "打开 Claude 聊天记录查看器",
+        "title": "Open Claude Chat Records Viewer",
         "icon": "$(comment-discussion)"
       },
       {
         "command": "claudeChat.refresh",
-        "title": "刷新聊天记录",
+        "title": "Refresh Chat Records",
         "icon": "$(refresh)"
       },
       {
         "command": "claudeChat.exportData",
-        "title": "导出聊天记录",
+        "title": "Export Chat Records",
         "icon": "$(save)"
       },
       {
         "command": "claudeChat.backToMain",
-        "title": "返回主界面",
+        "title": "Back to Main",
         "icon": "$(arrow-left)"
       }
     ],
@@ -48,7 +48,7 @@
       "explorer": [
         {
           "id": "claudeChat",
-          "name": "Claude 聊天记录",
+          "name": "Claude Chat Records",
           "when": "config.claudeChat.enabled"
         }
       ]
@@ -79,24 +79,24 @@
         "claudeChat.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "启用 Claude 聊天记录查看器"
+          "description": "Enable Claude Chat Records Viewer"
         },
         "claudeChat.configPath": {
           "type": "string",
           "default": "~/.claude.json",
-          "description": "Claude 配置文件路径"
+          "description": "Claude configuration file path"
         },
         "claudeChat.autoRefresh": {
           "type": "boolean",
           "default": true,
-          "description": "自动刷新聊天记录"
+          "description": "Auto refresh chat records"
         },
         "claudeChat.language": {
           "type": "string",
           "enum": ["zh-cn", "en"],
           "enumDescriptions": ["中文", "English"],
-          "default": "zh-cn",
-          "description": "界面语言设置"
+          "default": "en",
+          "description": "Interface language setting"
         }
       }
     }

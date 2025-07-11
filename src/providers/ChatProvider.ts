@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { getClaudeConfigPath } from '../utils/config';
+import { getCurrentLanguage, getMessages } from '../utils/i18n';
 
 export class ChatItem extends vscode.TreeItem {
     constructor(
@@ -56,8 +57,10 @@ export class ClaudeChatProvider implements vscode.TreeDataProvider<ChatItem | Pr
 
     private getProjects(): ProjectItem[] {
         const claudeData = this.readClaudeData();
+        const messages = getMessages();
+        
         if (!claudeData?.projects) {
-            return [new ProjectItem('无法读取 Claude 配置文件', '', vscode.TreeItemCollapsibleState.None)];
+            return [new ProjectItem('Unable to read Claude configuration file', '', vscode.TreeItemCollapsibleState.None)];
         }
         
         return Object.entries(claudeData.projects).map(([projectPath, projectData]: [string, any]) => {
@@ -65,12 +68,12 @@ export class ClaudeChatProvider implements vscode.TreeDataProvider<ChatItem | Pr
             const chatCount = projectData.history?.length || 0;
             
             const item = new ProjectItem(
-                `${projectName} (${chatCount} 条对话)`,
+                `${projectName} (${chatCount}${messages.chatCount})`,
                 projectPath,
                 vscode.TreeItemCollapsibleState.Collapsed,
                 projectData
             );
-            item.tooltip = `项目路径: ${projectPath}\n对话数量: ${chatCount}`;
+            item.tooltip = `${messages.projectPath}: ${projectPath}\n${messages.chatNumber}: ${chatCount}`;
             return item;
         });
     }
@@ -87,7 +90,7 @@ export class ClaudeChatProvider implements vscode.TreeDataProvider<ChatItem | Pr
         return history.map((chat: any, index: number): ChatItem | null => {
             // 验证聊天数据的有效性
             if (!chat || typeof chat.display !== 'string') {
-                console.warn(`跳过无效的聊天记录 (索引 ${index}):`, chat);
+                console.warn(`Skip invalid chat record (index ${index}):`, chat);
                 return null;
             }
             
@@ -121,16 +124,18 @@ export class ClaudeChatProvider implements vscode.TreeDataProvider<ChatItem | Pr
             const data = fs.readFileSync(claudeConfigPath, 'utf8');
             return JSON.parse(data);
         } catch (error) {
-            console.error('读取 claude.json 失败:', error);
-            vscode.window.showErrorMessage(`读取 Claude 配置文件失败: ${error}`);
+            console.error('Failed to read claude.json:', error);
+            vscode.window.showErrorMessage(`Failed to read Claude configuration file: ${error}`);
             return null;
         }
     }
 
     async exportData(): Promise<void> {
         const claudeData = this.readClaudeData();
+        const messages = getMessages();
+        
         if (!claudeData) {
-            vscode.window.showErrorMessage('无法读取 Claude 数据');
+            vscode.window.showErrorMessage('Unable to read Claude data');
             return;
         }
 
@@ -145,9 +150,9 @@ export class ClaudeChatProvider implements vscode.TreeDataProvider<ChatItem | Pr
         if (uri) {
             try {
                 fs.writeFileSync(uri.fsPath, JSON.stringify(claudeData, null, 2));
-                vscode.window.showInformationMessage(`聊天记录已导出到: ${uri.fsPath}`);
+                vscode.window.showInformationMessage(`Chat records exported to: ${uri.fsPath}`);
             } catch (error) {
-                vscode.window.showErrorMessage(`导出失败: ${error}`);
+                vscode.window.showErrorMessage(`Export failed: ${error}`);
             }
         }
     }
