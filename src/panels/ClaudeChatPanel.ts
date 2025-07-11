@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { getClaudeConfigPath } from '../utils/config';
 import { getWebviewContent } from '../templates/webview';
+import { getCurrentLanguage, getMessages } from '../utils/i18n';
 
 export class ClaudeChatPanel {
     public static currentPanel: ClaudeChatPanel | undefined;
@@ -43,7 +44,8 @@ export class ClaudeChatPanel {
 
     private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri, chatData?: any, projectPath?: string) {
         this._panel = panel;
-        this._panel.webview.html = getWebviewContent(extensionUri);
+        const currentLanguage = getCurrentLanguage();
+        this._panel.webview.html = getWebviewContent(extensionUri, currentLanguage);
         
         // 监听面板关闭事件
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
@@ -127,7 +129,8 @@ export class ClaudeChatPanel {
             command: 'showChat',
             data: chatData,
             projectPath: projectPath,
-            projectData: projectData
+            projectData: projectData,
+            language: getCurrentLanguage()
         });
     }
 
@@ -146,7 +149,8 @@ export class ClaudeChatPanel {
             data: {
                 projectPath: projectPath,
                 projectData: claudeData.projects[projectPath]
-            }
+            },
+            language: getCurrentLanguage()
         });
     }
 
@@ -190,7 +194,8 @@ export class ClaudeChatPanel {
         const claudeData = this._readClaudeData();
         this._panel.webview.postMessage({
             command: 'allChatData',
-            data: claudeData
+            data: claudeData,
+            language: getCurrentLanguage()
         });
     }
 

@@ -82,6 +82,13 @@
           "type": "boolean",
           "default": true,
           "description": "自动刷新聊天记录"
+        },
+        "claudeChat.language": {
+          "type": "string",
+          "enum": ["zh-cn", "en"],
+          "enumDescriptions": ["中文", "English"],
+          "default": "zh-cn",
+          "description": "界面语言设置"
         }
       }
     }
