@@ -1,0 +1,105 @@
+{
+  "name": "claude-chat-viewer",
+  "displayName": "Claude Chat Viewer",
+  "description": "可视化展示 Claude 聊天记录的 VS Code 扩展",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "claudeChat.openViewer",
+        "title": "打开 Claude 聊天记录查看器",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "claudeChat.refresh",
+        "title": "刷新聊天记录",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "claudeChat.exportData",
+        "title": "导出聊天记录",
+        "icon": "$(save)"
+      },
+      {
+        "command": "claudeChat.backToMain",
+        "title": "返回主界面",
+        "icon": "$(arrow-left)"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "claudeChat",
+          "name": "Claude 聊天记录",
+          "when": "config.claudeChat.enabled"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "claudeChat.refresh",
+          "when": "view == claudeChat",
+          "group": "navigation"
+        },
+        {
+          "command": "claudeChat.exportData",
+          "when": "view == claudeChat",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "claudeChat.openViewer",
+          "when": "true"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Claude Chat Viewer",
+      "properties": {
+        "claudeChat.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "启用 Claude 聊天记录查看器"
+        },
+        "claudeChat.configPath": {
+          "type": "string",
+          "default": "~/.claude.json",
+          "description": "Claude 配置文件路径"
+        },
+        "claudeChat.autoRefresh": {
+          "type": "boolean",
+          "default": true,
+          "description": "自动刷新聊天记录"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.7",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.0"
+  }
+}
